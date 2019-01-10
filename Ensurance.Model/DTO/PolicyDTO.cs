@@ -11,10 +11,10 @@ namespace Ensurance.Model.DTO
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string CoverageType { get; set; }
+        public int CoverageType { get; set; }
         public DateTime StartDate { get; set; }
         public int CoverageTime { get; set; }
-        public float Cost { get; set; }
+        public double Cost { get; set; }
         public int RiskType { get; set; }
         public decimal CoveragePercentage { get; set; }
 

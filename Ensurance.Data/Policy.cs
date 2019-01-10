@@ -22,7 +22,7 @@ namespace Ensurance.Data
         public int CoverageTime { get; set; }
         public double Cost { get; set; }
         public int RiskType { get; set; }
-        public Nullable<decimal> CoveragePercentage { get; set; }
+        public decimal CoveragePercentage { get; set; }
     
         public virtual Coverage Coverage { get; set; }
         public virtual Risk Risk { get; set; }

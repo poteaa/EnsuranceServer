@@ -124,13 +124,6 @@
       <DependentUpon>Ensurance.edmx</DependentUpon>
       <LastGenOutput>Ensurance.cs</LastGenOutput>
     </Content>
-    <Content Include="EnsuranceDB.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EnsuranceDB_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>EnsuranceDB.mdf</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

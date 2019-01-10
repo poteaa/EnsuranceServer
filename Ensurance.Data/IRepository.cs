@@ -1,15 +1,18 @@
-﻿using Ensurance.Model.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Ensurance.Model.DTO;
 
 namespace Ensurance.Data
 {
     public interface IRepository
     {
+        void AddPolicy(PolicyDTO newPolicy);
+        void DeletePolicy(int id);
+        CoverageDTO GetCoverage(int id);
+        List<CoverageDTO> GetCoverages();
         List<PolicyDTO> GetPolicies();
         PolicyDTO GetPolicy(int id);
+        RiskDTO GetRisk(int id);
+        List<RiskDTO> GetRisks();
+        void UpdatePolicy(PolicyDTO updatePolicy);
     }
 }
