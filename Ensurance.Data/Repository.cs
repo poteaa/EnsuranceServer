@@ -9,16 +9,16 @@ namespace Ensurance.Data
 {
     public class Repository : IRepository
     {
-        IEnsuranceContext context = new EnsuranceDBEntities();
+        EnsuranceDBEntities context = new EnsuranceDBEntities();
 
         public Repository()
         {
         }
 
-        public Repository(IEnsuranceContext context)
-        {
-            this.context = context;
-        }
+        //public Repository(IEnsuranceContext context)
+        //{
+        //    this.context = context;
+        //}
 
         public List<PolicyDTO> GetPolicies()
         {
@@ -34,7 +34,6 @@ namespace Ensurance.Data
                         CoverageType = p.CoverageType,
                         CoveragePercentage = p.CoveragePercentage,
                         CoverageTime = p.CoverageTime,
-                        StartDate = p.StartDate,
                         Cost = p.Cost,
                         RiskType = p.RiskType
                     }).ToList();
@@ -58,7 +57,6 @@ namespace Ensurance.Data
                         CoverageType = p.CoverageType,
                         CoveragePercentage = p.CoveragePercentage,
                         CoverageTime = p.CoverageTime,
-                        StartDate = p.StartDate,
                         Cost = p.Cost,
                         RiskType = p.RiskType
                     }).FirstOrDefault();
@@ -67,38 +65,40 @@ namespace Ensurance.Data
             return policy;
         }
 
-        public async void AddPolicy(PolicyDTO newPolicy)
+        public async Task<PolicyDTO> AddPolicy(PolicyDTO newPolicy)
         {
-            var context1 = new EnsuranceDBEntities();
+            Policy policy = null;
             using (var context = new EnsuranceDBEntities())
             {
-                var policy = context.Policies
+                var existingPolicy = context.Policies
                     .Any(p => (p.Name == newPolicy.Name.Trim()));
 
-                if (!policy)
+                if (!existingPolicy)
                 {
-                    context.Policies.Add(new Policy
+                    policy = new Policy
                     {
-                        Id = newPolicy.Id,
                         Name = newPolicy.Name,
                         Description = newPolicy.Description,
                         CoverageType = newPolicy.CoverageType,
                         CoveragePercentage = newPolicy.CoveragePercentage,
                         CoverageTime = newPolicy.CoverageTime,
-                        StartDate = newPolicy.StartDate,
                         Cost = newPolicy.Cost,
                         RiskType = newPolicy.RiskType
-                    });
+                    };
+                    context.Policies.Add(policy);
                     await context.SaveChangesAsync();
+                    newPolicy.Id = policy.Id;
                 }
                 else
                 {
 
                 }
             }
+
+            return newPolicy;
         }
 
-        public async void UpdatePolicy(PolicyDTO updatePolicy)
+        public async Task<PolicyDTO> UpdatePolicy(PolicyDTO updatePolicy)
         {
             var context1 = new EnsuranceDBEntities();
             using (var context = new EnsuranceDBEntities())
@@ -109,13 +109,11 @@ namespace Ensurance.Data
                 
                 if (policy != null)
                 {
-                    policy.Id = updatePolicy.Id;
                     policy.Name = updatePolicy.Name;
                     policy.Description = updatePolicy.Description;
                     policy.CoverageType = updatePolicy.CoverageType;
                     policy.CoveragePercentage = updatePolicy.CoveragePercentage;
                     policy.CoverageTime = updatePolicy.CoverageTime;
-                    policy.StartDate = updatePolicy.StartDate;
                     policy.Cost = updatePolicy.Cost;
                     policy.RiskType = updatePolicy.RiskType;
                     await context.SaveChangesAsync();
@@ -125,9 +123,11 @@ namespace Ensurance.Data
 
                 }
             }
+
+            return updatePolicy;
         }
 
-        public async void DeletePolicy(int id)
+        public async Task DeletePolicy(int id)
         {
             using (var context = new EnsuranceDBEntities())
             {

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -36,17 +37,37 @@ namespace Ensurance.Controllers
         }
 
         // POST api/<controller>
-        public void Post([FromBody]string value)
+        [ResponseType(typeof(PolicyDTO))]
+        public async Task<IHttpActionResult> PostAsync([FromBody]PolicyDTO policy)
         {
+            if (policy == null)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                PolicyDTO updatedPolicy = await repository.AddPolicy(policy);
+                return Content(HttpStatusCode.Created, updatedPolicy);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
 
         // PUT api/<controller>/5
-        public IHttpActionResult Put(int id, [FromBody]PolicyDTO policy)
+        [ResponseType(typeof(PolicyDTO))]
+        public async Task<IHttpActionResult> PutAsync(int id, [FromBody]PolicyDTO policy)
         {
+            if (policy == null)
+            {
+                return BadRequest();
+            }
             try
             {
-                repository.UpdatePolicy(policy);
-                return Ok();
+                policy.Id = id;
+                PolicyDTO updatedPolicy = await repository.UpdatePolicy(policy);
+                return Ok(updatedPolicy);
             }
             catch(Exception ex)
             {
@@ -55,8 +76,17 @@ namespace Ensurance.Controllers
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        public async Task<IHttpActionResult> DeleteAsync(int id)
         {
+            try
+            {
+                await repository.DeletePolicy(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
     }
 }

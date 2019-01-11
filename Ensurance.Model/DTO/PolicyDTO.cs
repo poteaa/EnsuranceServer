@@ -12,7 +12,6 @@ namespace Ensurance.Model.DTO
         public string Name { get; set; }
         public string Description { get; set; }
         public int CoverageType { get; set; }
-        public DateTime StartDate { get; set; }
         public int CoverageTime { get; set; }
         public double Cost { get; set; }
         public int RiskType { get; set; }

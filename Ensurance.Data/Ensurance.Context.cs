@@ -13,7 +13,7 @@ namespace Ensurance.Data
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class EnsuranceDBEntities : DbContext, IEnsuranceContext
+    public partial class EnsuranceDBEntities : DbContext
     {
         public EnsuranceDBEntities()
             : base("name=EnsuranceDBEntities")
@@ -26,7 +26,9 @@ namespace Ensurance.Data
         }
     
         public virtual DbSet<Coverage> Coverages { get; set; }
-        public virtual DbSet<Policy> Policies { get; set; }
         public virtual DbSet<Risk> Risks { get; set; }
+        public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<ClientPolicy> ClientPolicies { get; set; }
+        public virtual DbSet<Policy> Policies { get; set; }
     }
 }

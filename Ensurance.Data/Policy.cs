@@ -14,17 +14,24 @@ namespace Ensurance.Data
     
     public partial class Policy
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Policy()
+        {
+            this.ClientPolicies = new HashSet<ClientPolicy>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int CoverageType { get; set; }
-        public System.DateTime StartDate { get; set; }
         public int CoverageTime { get; set; }
         public double Cost { get; set; }
         public int RiskType { get; set; }
         public decimal CoveragePercentage { get; set; }
     
         public virtual Coverage Coverage { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPolicy> ClientPolicies { get; set; }
         public virtual Risk Risk { get; set; }
     }
 }

@@ -70,6 +70,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client.cs">
+      <DependentUpon>Ensurance.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClientPolicy.cs">
+      <DependentUpon>Ensurance.tt</DependentUpon>
+    </Compile>
     <Compile Include="Coverage.cs">
       <DependentUpon>Ensurance.tt</DependentUpon>
     </Compile>
