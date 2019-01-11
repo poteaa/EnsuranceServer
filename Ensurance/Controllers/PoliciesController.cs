@@ -36,11 +36,20 @@ namespace Ensurance.Controllers
             return Ok(policy);
         }
 
+        // GET api/<controller>/5
+        [ResponseType(typeof(PolicyCompleteDTO))]
+        [HttpGet, Route("api/policiesallinfo/{id}")]
+        public IHttpActionResult GetFull(int id)
+        {
+            PolicyCompleteDTO policy = repository.GetPolicyComplete(id);
+            return Ok(policy);
+        }
+
         // POST api/<controller>
         [ResponseType(typeof(PolicyDTO))]
         public async Task<IHttpActionResult> PostAsync([FromBody]PolicyDTO policy)
         {
-            if (policy == null)
+            if (policy == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }
@@ -59,7 +68,7 @@ namespace Ensurance.Controllers
         [ResponseType(typeof(PolicyDTO))]
         public async Task<IHttpActionResult> PutAsync(int id, [FromBody]PolicyDTO policy)
         {
-            if (policy == null)
+            if (policy == null || !ModelState.IsValid)
             {
                 return BadRequest();
             }

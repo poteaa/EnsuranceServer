@@ -12,6 +12,7 @@ namespace Ensurance.Data
         List<CoverageDTO> GetCoverages();
         List<PolicyDTO> GetPolicies();
         PolicyDTO GetPolicy(int id);
+        PolicyCompleteDTO GetPolicyComplete(int id);
         RiskDTO GetRisk(int id);
         List<RiskDTO> GetRisks();
         Task<PolicyDTO> UpdatePolicy(PolicyDTO updatePolicy);

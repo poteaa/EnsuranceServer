@@ -65,6 +65,31 @@ namespace Ensurance.Data
             return policy;
         }
 
+        public PolicyCompleteDTO GetPolicyComplete(int id)
+        {
+            PolicyCompleteDTO policy;
+            using (var context = new EnsuranceDBEntities())
+            {
+                policy = context.Policies.AsNoTracking()
+                    .Where(p => p.Id == id)
+                    .Select(p => new PolicyCompleteDTO
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        CoverageType = p.CoverageType,
+                        CoveragePercentage = p.CoveragePercentage,
+                        CoverageTime = p.CoverageTime,
+                        Cost = p.Cost,
+                        RiskType = p.RiskType,
+                        CoverageName = p.Coverage.Name,
+                        RiskName = p.Risk.Name
+                    }).FirstOrDefault();
+            }
+
+            return policy;
+        }
+
         public async Task<PolicyDTO> AddPolicy(PolicyDTO newPolicy)
         {
             Policy policy = null;
@@ -91,7 +116,7 @@ namespace Ensurance.Data
                 }
                 else
                 {
-
+                    throw new Exception("A policy with the same name already exists.");
                 }
             }
 
@@ -120,7 +145,7 @@ namespace Ensurance.Data
                 }
                 else
                 {
-
+                    throw new Exception("The policy does not exist.");
                 }
             }
 
