@@ -1,4 +1,5 @@
-﻿using Ensurance.Model.DTO;
+﻿using Ensurance.Model;
+using Ensurance.Model.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,31 @@ namespace Ensurance.Data
         //    this.context = context;
         //}
 
+        #region Authentication
+
+        public AuthenticatedUser AuthenticateUser(Authentication login)
+        {
+            AuthenticatedUser user = null;
+            using (var context = new EnsuranceDBEntities())
+            {
+                user = context.Users.AsNoTracking()
+                    .Where(u => u.UserName == login.UserName && u.Password == login.Password)
+                    .Select(u => new AuthenticatedUser
+                    {
+                        Id = u.Id,
+                        Name = u.Name,
+                        LastName = u.LastName,
+                        Username = u.UserName,
+                        Token = ""
+                    }).FirstOrDefault<AuthenticatedUser>();
+            }
+            return user;
+        }
+
+        #endregion Authentication
+
+        #region Policies
+
         public List<PolicyDTO> GetPolicies()
         {
             List<PolicyDTO> policies = new List<PolicyDTO>();
@@ -40,6 +66,22 @@ namespace Ensurance.Data
             }
 
             return policies;
+        }
+
+        public List<PolicyBasicInfoDTO> GetPoliciesBasicInfo()
+        {
+            List<PolicyBasicInfoDTO> policiesMin = new List<PolicyBasicInfoDTO>();
+            using (var context = new EnsuranceDBEntities())
+            {
+                policiesMin = context.Policies.AsNoTracking()
+                    .Select(p => new PolicyBasicInfoDTO
+                    {
+                        Id = p.Id,
+                        Name = p.Name
+                    }).ToList();
+            }
+
+            return policiesMin;
         }
 
         public PolicyDTO GetPolicy(int id)
@@ -163,6 +205,10 @@ namespace Ensurance.Data
             }
         }
 
+        #endregion Policies
+
+        #region Coverages
+
         public List<CoverageDTO> GetCoverages()
         {
             List<CoverageDTO> coverages = new List<CoverageDTO>();
@@ -195,6 +241,10 @@ namespace Ensurance.Data
 
             return coverage;
         }
+
+        #endregion Coverages
+
+        #region Risks
 
         public List<RiskDTO> GetRisks()
         {
@@ -229,6 +279,136 @@ namespace Ensurance.Data
             return risk;
         }
 
+        #endregion Risks
+
+        #region Clients
+
+        public List<ClientBasicInfoDTO> GetClientsBasicInfo()
+        {
+            List<ClientBasicInfoDTO> clientsMin = new List<ClientBasicInfoDTO>();
+            using (var context = new EnsuranceDBEntities())
+            {
+                clientsMin = context.Clients.AsNoTracking()
+                    .Select(c => new ClientBasicInfoDTO
+                    {
+                        Id = c.Id,
+                        FirstName = c.FirstName,
+                        LastName = c.LastName
+                    }).ToList<ClientBasicInfoDTO>();
+            }
+
+            return clientsMin;
+        }
+        public ClientBasicInfoDTO GetClientBasicInfo(int id)
+        {
+            ClientBasicInfoDTO clientBasicInfo = null;
+            using (var context = new EnsuranceDBEntities())
+            {
+                clientBasicInfo = context.Clients.AsNoTracking()
+                    .Where(c => c.Id == id)
+                    .Select(c => new ClientBasicInfoDTO
+                    {
+                        Id = c.Id,
+                        FirstName = c.FirstName,
+                        LastName = c.LastName
+                    }).FirstOrDefault<ClientBasicInfoDTO>();
+            }
+
+            return clientBasicInfo;
+        }
+        
+        public ClientDTO GetClient(int id)
+        {
+            ClientDTO client;
+            using (var context = new EnsuranceDBEntities())
+            {
+                //var client = context.Clients.AsNoTracking()
+                //                    .Where(c => c.Id == id).FirstOrDefault();
+
+                client = context.Clients.AsNoTracking()
+                            .Select(c => new ClientDTO
+                            {
+                                Id = c.Id,
+                                FirstName = c.FirstName,
+                                LastName = c.LastName,
+                                PolicyIds = c.ClientPolicies.Select(p => p.PolicyId).ToList<int>()
+                            }).FirstOrDefault();
+            }
+
+            return client;
+        }
+
+        #endregion Clients
+
+        #region ClientPolicies
+
+        public List<ClientPolicyDTO> GetClientPolicyByClientId(int clientId)
+        {
+            List<ClientPolicyDTO> clientPolicyDTO = new List<ClientPolicyDTO>();
+            using (var context = new EnsuranceDBEntities())
+            {
+                clientPolicyDTO = context.ClientPolicies
+                    .Where(cp => cp.ClientId == clientId)
+                    .Select(cp => new ClientPolicyDTO
+                    {
+                        Id = cp.Id,
+                        ClientId = clientId,
+                        PolicyId = cp.PolicyId,
+                        PolicyName = cp.Policy.Name,
+                        StartDate = cp.StartDate
+                    }).ToList<ClientPolicyDTO>();
+            }
+
+            return clientPolicyDTO;
+        }
+
+        public async Task<ClientPolicyDTO> AddClientPolicy(ClientPolicyDTO newClientPolicy)
+        {
+            ClientPolicy clientPolicy = null;
+            List<int> idsToRemove = new List<int>();
+            using (var context = new EnsuranceDBEntities())
+            {
+                var existingClientPolicy = context.ClientPolicies
+                    .Any(cp => cp.ClientId == newClientPolicy.ClientId
+                                && cp.PolicyId == newClientPolicy.PolicyId);
+
+                if (!existingClientPolicy)
+                {
+                    clientPolicy = new ClientPolicy
+                    {
+                        ClientId = newClientPolicy.ClientId,
+                        PolicyId = newClientPolicy.PolicyId,
+                        StartDate = DateTime.Now
+                    };
+                    context.ClientPolicies.Add(clientPolicy);
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception("The client already has this policy.");
+                }
+
+            }
+
+            return newClientPolicy;
+        }
+
+        public async Task DeleteClientPolicy(int id)
+        {
+            using (var context = new EnsuranceDBEntities())
+            {
+                var tmpClientPolicy = new ClientPolicy
+                {
+                    Id = id
+                };
+                context.ClientPolicies.Attach(tmpClientPolicy);
+                context.ClientPolicies.Remove(tmpClientPolicy);
+                await context.SaveChangesAsync();
+            }
+
+        }
+
+        #endregion ClientPolicies
 
     }
 }

@@ -17,6 +17,7 @@ namespace Ensurance.Data
         public int ClientId { get; set; }
         public int PolicyId { get; set; }
         public System.DateTime StartDate { get; set; }
+        public int Id { get; set; }
     
         public virtual Client Client { get; set; }
         public virtual Policy Policy { get; set; }

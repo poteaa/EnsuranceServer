@@ -30,8 +30,8 @@ namespace Ensurance.Data
         public decimal CoveragePercentage { get; set; }
     
         public virtual Coverage Coverage { get; set; }
+        public virtual Risk Risk { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ClientPolicy> ClientPolicies { get; set; }
-        public virtual Risk Risk { get; set; }
     }
 }

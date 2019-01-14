@@ -8,13 +8,14 @@
         <EntityTypeShape EntityType="EnsuranceDBModel.Coverage" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EnsuranceDBModel.Risk" Width="1.5" PointX="3.25" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="EnsuranceDBModel.Client" Width="1.5" PointX="3" PointY="7.75" />
-        <EntityTypeShape EntityType="EnsuranceDBModel.ClientPolicy" Width="1.5" PointX="5.25" PointY="1.625" />
-        <AssociationConnector Association="EnsuranceDBModel.FK__ClientPol__Clien__3A81B327" />
         <EntityTypeShape EntityType="EnsuranceDBModel.Policy" Width="1.5" PointX="5.5" PointY="4.5" />
         <AssociationConnector Association="EnsuranceDBModel.FK__Policy__Coverage__32E0915F" />
-        <AssociationConnector Association="EnsuranceDBModel.FK__ClientPol__Polic__3B75D760" />
         <AssociationConnector Association="EnsuranceDBModel.FK__Policy__RiskType__300424B4" />
-      </Diagram>
+        <EntityTypeShape EntityType="EnsuranceDBModel.ClientPolicy" Width="1.5" PointX="7.75" PointY="5.875" />
+        <AssociationConnector Association="EnsuranceDBModel.FK__ClientPol__Clien__6FE99F9F" />
+        <AssociationConnector Association="EnsuranceDBModel.FK__ClientPol__Polic__70DDC3D8" />
+        <EntityTypeShape EntityType="EnsuranceDBModel.User" Width="1.5" PointX="3.375" PointY="0.75" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

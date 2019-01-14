@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace Ensurance.Model.DTO
 {
-    public class PolicyDTO
+    public class PolicyBasicInfoDTO
     {
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+    }
+    public class PolicyDTO: PolicyBasicInfoDTO
+    {
         [Required]
         public string Description { get; set; }
         [Required]

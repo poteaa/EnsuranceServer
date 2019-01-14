@@ -104,6 +104,9 @@
     <Compile Include="Risk.cs">
       <DependentUpon>Ensurance.tt</DependentUpon>
     </Compile>
+    <Compile Include="User.cs">
+      <DependentUpon>Ensurance.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

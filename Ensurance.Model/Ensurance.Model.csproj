@@ -47,10 +47,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticatedUser.cs" />
+    <Compile Include="DTO\ClientDTO.cs" />
+    <Compile Include="DTO\ClientPolicyDTO.cs" />
     <Compile Include="DTO\CoverageDTO.cs" />
+    <Compile Include="Authentication.cs" />
     <Compile Include="DTO\PolicyDTO.cs" />
     <Compile Include="DTO\PolicyCompleteDTO.cs" />
     <Compile Include="DTO\RiskDTO.cs" />
+    <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

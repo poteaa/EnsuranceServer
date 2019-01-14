@@ -20,7 +20,16 @@ namespace Ensurance.Controllers
             this.repository = new Repository();
         }
 
-        // GET api/<controller>
+        // GET api/policies
+        [ResponseType(typeof(List<PolicyBasicInfoDTO>))]
+        [HttpGet, Route("api/policies/basicinfo")]
+        public IHttpActionResult GetBasicInfo()
+        {
+            List<PolicyBasicInfoDTO> policiesBasicInfo = repository.GetPoliciesBasicInfo();
+            return Ok(policiesBasicInfo);
+        }
+
+        // GET api/policies
         [ResponseType(typeof(List<PolicyDTO>))]
         public IHttpActionResult Get()
         {
@@ -28,7 +37,7 @@ namespace Ensurance.Controllers
             return Ok(policies);
         }
 
-        // GET api/<controller>/5
+        // GET api/policies/5
         [ResponseType(typeof(PolicyDTO))]
         public IHttpActionResult Get(int id)
         {
@@ -36,7 +45,7 @@ namespace Ensurance.Controllers
             return Ok(policy);
         }
 
-        // GET api/<controller>/5
+        // GET api/policiesallinfo/5
         [ResponseType(typeof(PolicyCompleteDTO))]
         [HttpGet, Route("api/policiesallinfo/{id}")]
         public IHttpActionResult GetFull(int id)
@@ -45,7 +54,7 @@ namespace Ensurance.Controllers
             return Ok(policy);
         }
 
-        // POST api/<controller>
+        // POST api/policies
         [ResponseType(typeof(PolicyDTO))]
         public async Task<IHttpActionResult> PostAsync([FromBody]PolicyDTO policy)
         {
@@ -64,7 +73,7 @@ namespace Ensurance.Controllers
             }
         }
 
-        // PUT api/<controller>/5
+        // PUT api/policies/5
         [ResponseType(typeof(PolicyDTO))]
         public async Task<IHttpActionResult> PutAsync(int id, [FromBody]PolicyDTO policy)
         {
@@ -84,7 +93,7 @@ namespace Ensurance.Controllers
             }
         }
 
-        // DELETE api/<controller>/5
+        // DELETE api/policies/5
         public async Task<IHttpActionResult> DeleteAsync(int id)
         {
             try

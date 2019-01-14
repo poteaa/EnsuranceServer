@@ -97,7 +97,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Auth\TokenGenerator.cs" />
+    <Compile Include="Auth\TokenStorage.cs" />
+    <Compile Include="Controllers\ClientPoliciesController.cs" />
+    <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\CoveragesController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PoliciesController.cs" />
     <Compile Include="Controllers\RisksController.cs" />
     <Compile Include="Global.asax.cs">

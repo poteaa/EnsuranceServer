@@ -13,17 +13,14 @@
           <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="LastName" Type="nchar" MaxLength="10" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'D:\STUDY\POC\ENSURANCE\ENSURANCE-SERVER\ENSURANCEDB.MDF.dbo.ClientPolicy' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ClientPolicy">
           <Key>
-            <PropertyRef Name="ClientId" />
-            <PropertyRef Name="PolicyId" />
-            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="ClientId" Type="int" Nullable="false" />
           <Property Name="PolicyId" Type="int" Nullable="false" />
           <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="Coverage">
           <Key>
@@ -52,7 +49,17 @@ warning 6002: The table/view 'D:\STUDY\POC\ENSURANCE\ENSURANCE-SERVER\ENSURANCED
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nchar" MaxLength="20" Nullable="false" />
         </EntityType>
-        <Association Name="FK__ClientPol__Clien__3A81B327">
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__ClientPol__Clien__6FE99F9F">
           <End Role="Client" Type="Self.Client" Multiplicity="1" />
           <End Role="ClientPolicy" Type="Self.ClientPolicy" Multiplicity="*" />
           <ReferentialConstraint>
@@ -64,7 +71,7 @@ warning 6002: The table/view 'D:\STUDY\POC\ENSURANCE\ENSURANCE-SERVER\ENSURANCED
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ClientPol__Polic__3B75D760">
+        <Association Name="FK__ClientPol__Polic__70DDC3D8">
           <End Role="Policy" Type="Self.Policy" Multiplicity="1" />
           <End Role="ClientPolicy" Type="Self.ClientPolicy" Multiplicity="*" />
           <ReferentialConstraint>
@@ -102,21 +109,16 @@ warning 6002: The table/view 'D:\STUDY\POC\ENSURANCE\ENSURANCE-SERVER\ENSURANCED
         </Association>
         <EntityContainer Name="EnsuranceDBModelStoreContainer">
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClientPolicy" EntityType="Self.ClientPolicy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Coverage" EntityType="Self.Coverage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Policy" EntityType="Self.Policy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Risk" EntityType="Self.Risk" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ClientPolicy" EntityType="Self.ClientPolicy" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [ClientPolicy].[ClientId] AS [ClientId], 
-    [ClientPolicy].[PolicyId] AS [PolicyId], 
-    [ClientPolicy].[StartDate] AS [StartDate]
-    FROM [dbo].[ClientPolicy] AS [ClientPolicy]</DefiningQuery>
-          </EntitySet>
-          <AssociationSet Name="FK__ClientPol__Clien__3A81B327" Association="Self.FK__ClientPol__Clien__3A81B327">
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__ClientPol__Clien__6FE99F9F" Association="Self.FK__ClientPol__Clien__6FE99F9F">
             <End Role="Client" EntitySet="Client" />
             <End Role="ClientPolicy" EntitySet="ClientPolicy" />
           </AssociationSet>
-          <AssociationSet Name="FK__ClientPol__Polic__3B75D760" Association="Self.FK__ClientPol__Polic__3B75D760">
+          <AssociationSet Name="FK__ClientPol__Polic__70DDC3D8" Association="Self.FK__ClientPol__Polic__70DDC3D8">
             <End Role="Policy" EntitySet="Policy" />
             <End Role="ClientPolicy" EntitySet="ClientPolicy" />
           </AssociationSet>
@@ -153,25 +155,26 @@ warning 6002: The table/view 'D:\STUDY\POC\ENSURANCE\ENSURANCE-SERVER\ENSURANCED
           <EntitySet Name="Coverages" EntityType="Self.Coverage" />
           <EntitySet Name="Risks" EntityType="Self.Risk" />
           <EntitySet Name="Clients" EntityType="EnsuranceDBModel.Client" />
-          <EntitySet Name="ClientPolicies" EntityType="EnsuranceDBModel.ClientPolicy" />
-          <AssociationSet Name="FK__ClientPol__Clien__3A81B327" Association="EnsuranceDBModel.FK__ClientPol__Clien__3A81B327">
-            <End Role="Client" EntitySet="Clients" />
-            <End Role="ClientPolicy" EntitySet="ClientPolicies" />
-          </AssociationSet>
           <EntitySet Name="Policies" EntityType="EnsuranceDBModel.Policy" />
           <AssociationSet Name="FK__Policy__Coverage__32E0915F" Association="EnsuranceDBModel.FK__Policy__Coverage__32E0915F">
             <End Role="Coverage" EntitySet="Coverages" />
             <End Role="Policy" EntitySet="Policies" />
           </AssociationSet>
-          <AssociationSet Name="FK__ClientPol__Polic__3B75D760" Association="EnsuranceDBModel.FK__ClientPol__Polic__3B75D760">
-            <End Role="Policy" EntitySet="Policies" />
-            <End Role="ClientPolicy" EntitySet="ClientPolicies" />
-          </AssociationSet>
           <AssociationSet Name="FK__Policy__RiskType__300424B4" Association="EnsuranceDBModel.FK__Policy__RiskType__300424B4">
             <End Role="Risk" EntitySet="Risks" />
             <End Role="Policy" EntitySet="Policies" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="ClientPolicies" EntityType="EnsuranceDBModel.ClientPolicy" />
+          <AssociationSet Name="FK__ClientPol__Clien__6FE99F9F" Association="EnsuranceDBModel.FK__ClientPol__Clien__6FE99F9F">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="ClientPolicy" EntitySet="ClientPolicies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ClientPol__Polic__70DDC3D8" Association="EnsuranceDBModel.FK__ClientPol__Polic__70DDC3D8">
+            <End Role="Policy" EntitySet="Policies" />
+            <End Role="ClientPolicy" EntitySet="ClientPolicies" />
+          </AssociationSet>
+          <EntitySet Name="Users" EntityType="EnsuranceDBModel.User" />
+          </EntityContainer>
         <EntityType Name="Client">
           <Key>
             <PropertyRef Name="Id" />
@@ -179,32 +182,8 @@ warning 6002: The table/view 'D:\STUDY\POC\ENSURANCE\ENSURANCE-SERVER\ENSURANCED
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LastName" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="ClientPolicies" Relationship="EnsuranceDBModel.FK__ClientPol__Clien__3A81B327" FromRole="Client" ToRole="ClientPolicy" />
+          <NavigationProperty Name="ClientPolicies" Relationship="EnsuranceDBModel.FK__ClientPol__Clien__6FE99F9F" FromRole="Client" ToRole="ClientPolicy" />
         </EntityType>
-        <EntityType Name="ClientPolicy">
-          <Key>
-            <PropertyRef Name="ClientId" />
-            <PropertyRef Name="PolicyId" />
-            <PropertyRef Name="StartDate" />
-          </Key>
-          <Property Name="ClientId" Type="Int32" Nullable="false" />
-          <Property Name="PolicyId" Type="Int32" Nullable="false" />
-          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Client" Relationship="EnsuranceDBModel.FK__ClientPol__Clien__3A81B327" FromRole="ClientPolicy" ToRole="Client" />
-          <NavigationProperty Name="Policy" Relationship="EnsuranceDBModel.FK__ClientPol__Polic__3B75D760" FromRole="ClientPolicy" ToRole="Policy" />
-        </EntityType>
-        <Association Name="FK__ClientPol__Clien__3A81B327">
-          <End Type="EnsuranceDBModel.Client" Role="Client" Multiplicity="1" />
-          <End Type="EnsuranceDBModel.ClientPolicy" Role="ClientPolicy" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Client">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ClientPolicy">
-              <PropertyRef Name="ClientId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Policy">
           <Key>
             <PropertyRef Name="Id" />
@@ -218,8 +197,8 @@ warning 6002: The table/view 'D:\STUDY\POC\ENSURANCE\ENSURANCE-SERVER\ENSURANCED
           <Property Name="RiskType" Type="Int32" Nullable="false" />
           <Property Name="CoveragePercentage" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
           <NavigationProperty Name="Coverage" Relationship="EnsuranceDBModel.FK__Policy__Coverage__32E0915F" FromRole="Policy" ToRole="Coverage" />
-          <NavigationProperty Name="ClientPolicies" Relationship="EnsuranceDBModel.FK__ClientPol__Polic__3B75D760" FromRole="Policy" ToRole="ClientPolicy" />
           <NavigationProperty Name="Risk" Relationship="EnsuranceDBModel.FK__Policy__RiskType__300424B4" FromRole="Policy" ToRole="Risk" />
+          <NavigationProperty Name="ClientPolicies" Relationship="EnsuranceDBModel.FK__ClientPol__Polic__70DDC3D8" FromRole="Policy" ToRole="ClientPolicy" />
         </EntityType>
         <Association Name="FK__Policy__Coverage__32E0915F">
           <End Type="EnsuranceDBModel.Coverage" Role="Coverage" Multiplicity="1" />
@@ -230,18 +209,6 @@ warning 6002: The table/view 'D:\STUDY\POC\ENSURANCE\ENSURANCE-SERVER\ENSURANCED
             </Principal>
             <Dependent Role="Policy">
               <PropertyRef Name="CoverageType" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__ClientPol__Polic__3B75D760">
-          <End Type="EnsuranceDBModel.Policy" Role="Policy" Multiplicity="1" />
-          <End Type="EnsuranceDBModel.ClientPolicy" Role="ClientPolicy" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Policy">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ClientPolicy">
-              <PropertyRef Name="PolicyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -257,7 +224,52 @@ warning 6002: The table/view 'D:\STUDY\POC\ENSURANCE\ENSURANCE-SERVER\ENSURANCED
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="ClientPolicy">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="PolicyId" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Client" Relationship="EnsuranceDBModel.FK__ClientPol__Clien__6FE99F9F" FromRole="ClientPolicy" ToRole="Client" />
+          <NavigationProperty Name="Policy" Relationship="EnsuranceDBModel.FK__ClientPol__Polic__70DDC3D8" FromRole="ClientPolicy" ToRole="Policy" />
+        </EntityType>
+        <Association Name="FK__ClientPol__Clien__6FE99F9F">
+          <End Type="EnsuranceDBModel.Client" Role="Client" Multiplicity="1" />
+          <End Type="EnsuranceDBModel.ClientPolicy" Role="ClientPolicy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClientPolicy">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ClientPol__Polic__70DDC3D8">
+          <End Type="EnsuranceDBModel.Policy" Role="Policy" Multiplicity="1" />
+          <End Type="EnsuranceDBModel.ClientPolicy" Role="ClientPolicy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Policy">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ClientPolicy">
+              <PropertyRef Name="PolicyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -288,15 +300,6 @@ warning 6002: The table/view 'D:\STUDY\POC\ENSURANCE\ENSURANCE-SERVER\ENSURANCED
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ClientPolicies">
-            <EntityTypeMapping TypeName="EnsuranceDBModel.ClientPolicy">
-              <MappingFragment StoreEntitySet="ClientPolicy">
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="PolicyId" ColumnName="PolicyId" />
-                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Policies">
             <EntityTypeMapping TypeName="EnsuranceDBModel.Policy">
               <MappingFragment StoreEntitySet="Policy">
@@ -306,6 +309,27 @@ warning 6002: The table/view 'D:\STUDY\POC\ENSURANCE\ENSURANCE-SERVER\ENSURANCED
                 <ScalarProperty Name="CoverageTime" ColumnName="CoverageTime" />
                 <ScalarProperty Name="CoverageType" ColumnName="CoverageType" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientPolicies">
+            <EntityTypeMapping TypeName="EnsuranceDBModel.ClientPolicy">
+              <MappingFragment StoreEntitySet="ClientPolicy">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="PolicyId" ColumnName="PolicyId" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="EnsuranceDBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
