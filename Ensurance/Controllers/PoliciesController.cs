@@ -1,4 +1,5 @@
-﻿using Ensurance.Data;
+﻿using Ensurance.Auth;
+using Ensurance.Data;
 using Ensurance.Model.DTO;
 using System;
 using System.Collections.Generic;
@@ -55,6 +56,7 @@ namespace Ensurance.Controllers
         }
 
         // POST api/policies
+        [CustomAuthorize]
         [ResponseType(typeof(PolicyDTO))]
         public async Task<IHttpActionResult> PostAsync([FromBody]PolicyDTO policy)
         {
@@ -74,6 +76,7 @@ namespace Ensurance.Controllers
         }
 
         // PUT api/policies/5
+        [CustomAuthorize]
         [ResponseType(typeof(PolicyDTO))]
         public async Task<IHttpActionResult> PutAsync(int id, [FromBody]PolicyDTO policy)
         {
@@ -94,6 +97,7 @@ namespace Ensurance.Controllers
         }
 
         // DELETE api/policies/5
+        [CustomAuthorize]
         public async Task<IHttpActionResult> DeleteAsync(int id)
         {
             try
